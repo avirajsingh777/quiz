@@ -1,0 +1,72 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_QUESTIONS 3
+#define MAX_OPTIONS 4
+
+// Structure to represent a question
+typedef struct {
+    char prompt[100];
+    char options[MAX_OPTIONS][50];
+    char correct_answer[50];
+} Question;
+
+// Function to display a question and its options
+void display_question(Question q) {
+    printf("%s\n", q.prompt);
+    for (int i = 0; i < MAX_OPTIONS; i++) {
+        printf("%d. %s\n", i + 1, q.options[i]);
+    }
+}
+
+// Function to calculate the score based on user answers and display correct/incorrect answers
+int calculate_score(Question questions[], int user_answers[]) {
+    int score = 0;
+    printf("\nResults:\n");
+    for (int i = 0; i < MAX_QUESTIONS; i++) {
+        printf("Question %d: %s\n", i + 1, questions[i].prompt);
+        if (strcmp(questions[i].options[user_answers[i] - 1], questions[i].correct_answer) == 0) {
+            score++;
+            printf("Your answer: %s (Correct)\n", questions[i].options[user_answers[i] - 1]);
+        } else {
+            printf("Your answer: %s (Incorrect, Correct answer: %s)\n", questions[i].options[user_answers[i] - 1], questions[i].correct_answer);
+        }
+    }
+    return score;
+}
+
+int main() {
+    // Array of questions
+    Question questions[MAX_QUESTIONS] = {
+        {
+            "What is the capital of France?",
+            {"Berlin", "Madrid", "Paris", "Lisbon"},
+            "Paris"
+        },
+        {
+            "What is 2 + 2?",
+            {"3", "4", "5", "6"},
+            "4"
+        },
+        {
+            "What is the largest planet in our solar system?",
+            {"Earth", "Jupiter", "Mars", "Saturn"},
+            "Jupiter"
+        }
+    };
+
+    int user_answers[MAX_QUESTIONS];
+
+    // Loop through each question
+    for (int i = 0; i < MAX_QUESTIONS; i++) {
+        display_question(questions[i]);
+        printf("Your answer (1-%d): ", MAX_OPTIONS);
+        scanf("%d", &user_answers[i]);
+    }
+
+    // Calculate and display the score along with correct/incorrect answers
+    int score = calculate_score(questions, user_answers);
+    printf("\nYour score: %d out of %d\n", score, MAX_QUESTIONS);
+
+    return 0;
+}
